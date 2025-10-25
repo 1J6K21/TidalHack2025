@@ -4,9 +4,7 @@ import {
   getDownloadURL, 
   listAll, 
   getBytes,
-  deleteObject,
-  getMetadata,
-  updateMetadata
+  deleteObject
 } from 'firebase/storage';
 import { storage } from './firebase';
 import { 
@@ -18,7 +16,6 @@ import {
   GetManualResponse,
   GetManualsListResponse,
   FirebaseUploadOptions,
-  FirebaseDownloadOptions,
   ApiResponse,
   ErrorState,
   ErrorType

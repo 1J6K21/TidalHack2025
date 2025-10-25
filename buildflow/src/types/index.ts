@@ -107,6 +107,7 @@ export interface GenerateManualRequest {
 
 export interface GenerateManualResponse {
   manualId: string;
+  projectName: string;
   steps: Step[];
   materials: Material[];
   totalPrice: number;

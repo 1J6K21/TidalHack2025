@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { ErrorState, ErrorType, GenerateManualRequest, GenerateManualResponse, AppMode } from '../types';
-import { generateDemoManual, simulateApiDelay } from '../services/demoDataGenerator';
+import { ErrorState, ErrorType, GenerateManualRequest, GenerateManualResponse } from '../types';
+import { simulateApiDelay } from '../services/demoDataGenerator';
 
 interface GenerationState {
   isGenerating: boolean;
@@ -55,13 +55,51 @@ export function useManualGeneration(): UseManualGenerationReturn {
       const isDemo = isDemoMode || !hasGeminiKey;
 
       if (isDemo) {
-        // Use demo data generation
-        console.log('🎭 Generating demo manual for:', request.productIdea);
+        // In demo mode, select a demo manual based on the product idea
+        console.log('🎭 Demo mode: selecting demo manual for:', request.productIdea);
         
         // Simulate API delay
         await simulateApiDelay();
         
-        const demoResult = generateDemoManual(request.productIdea);
+        // Import data service to get demo manuals
+        const { dataService } = await import('../services/dataService');
+        const demoManuals = await dataService.loadManuals('demo' as any);
+        
+        // Select demo manual based on keywords in product idea
+        const lowerIdea = request.productIdea.toLowerCase();
+        let selectedManual;
+        
+        if (lowerIdea.includes('tamu') || lowerIdea.includes('logo') || lowerIdea.includes('aggie')) {
+          selectedManual = demoManuals.find(m => m.id === 'TAMU_logo');
+        } else if (lowerIdea.includes('lamp') || lowerIdea.includes('light')) {
+          selectedManual = demoManuals.find(m => m.id === 'lamp');
+        } else if (lowerIdea.includes('keyboard') || lowerIdea.includes('mechanical')) {
+          selectedManual = demoManuals.find(m => m.id === 'keyboard');
+        } else {
+          // Default to TAMU_logo for unknown ideas
+          selectedManual = demoManuals.find(m => m.id === 'TAMU_logo');
+        }
+        
+        // Fallback to first available manual if none found
+        if (!selectedManual && demoManuals.length > 0) {
+          selectedManual = demoManuals[0];
+        }
+        
+        if (!selectedManual) {
+          throw new Error('No demo manuals available');
+        }
+        
+        // Load the manual data
+        const manualData = await dataService.loadManualData(selectedManual, 'demo' as any);
+        
+        const demoResult: GenerateManualResponse = {
+          manualId: selectedManual.id,
+          projectName: selectedManual.productName,
+          steps: manualData.steps,
+          materials: manualData.materials,
+          totalPrice: selectedManual.totalPrice,
+          firebasePath: selectedManual.firebaseManualPath
+        };
         
         setState(prev => ({
           ...prev,

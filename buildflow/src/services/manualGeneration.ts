@@ -1,4 +1,4 @@
-import { model, generateWithGemini } from './gemini';
+import { model } from './gemini';
 import { uploadManual } from './firebaseStorage';
 import {
   Manual,
@@ -6,7 +6,6 @@ import {
   Material,
   GenerateManualRequest,
   GenerateManualResponse,
-  GeminiResponse,
   ApiResponse,
   ErrorState,
   ErrorType
@@ -50,33 +49,7 @@ export const CONTENT_VALIDATION = {
   MAX_TOTAL_TIME: 600
 } as const;
 
-// Generation configuration for manual generation
-const GENERATION_CONFIG = {
-  temperature: 0.7,
-  topK: 40,
-  topP: 0.95,
-  maxOutputTokens: 4096,
-};
 
-// Safety settings for content filtering
-const SAFETY_SETTINGS = [
-  {
-    category: 'HARM_CATEGORY_HARASSMENT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-  },
-  {
-    category: 'HARM_CATEGORY_HATE_SPEECH',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-  },
-  {
-    category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-  },
-  {
-    category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-  },
-];
 
 // ============================================================================
 // ERROR HANDLING UTILITIES
@@ -443,7 +416,7 @@ function sanitizeAIResponse(response: any): any {
   return sanitized;
 }
 
-function processGeminiResponse(rawResponse: any, productIdea: string): {
+function processGeminiResponse(rawResponse: any, _productIdea: string): {
   manual: Manual;
   steps: Step[];
   materials: Material[];
@@ -516,9 +489,6 @@ export async function generateManual(request: GenerateManualRequest): Promise<Ap
       throw new Error('User ID is required');
     }
     
-    // Generate prompt
-    const prompt = createManualGenerationPrompt(productIdea.trim());
-    
     // Call Gemini AI with enhanced error handling
     console.log('🤖 Generating manual with Gemini AI...');
     
@@ -536,11 +506,7 @@ export async function generateManual(request: GenerateManualRequest): Promise<Ap
           
         console.log(`🔄 Generation attempt ${attempts}/${maxAttempts}`);
         
-        const result = await model.generateContent({
-          contents: [{ parts: [{ text: currentPrompt }] }],
-          generationConfig: GENERATION_CONFIG,
-          safetySettings: SAFETY_SETTINGS,
-        });
+        const result = await model.generateContent(currentPrompt);
         
         const response = await result.response;
         const text = response.text();
@@ -555,7 +521,7 @@ export async function generateManual(request: GenerateManualRequest): Promise<Ap
           let cleanText = text
             .replace(/```json\n?/gi, '')
             .replace(/```\n?/g, '')
-            .replace(/^[^{]*({.*})[^}]*$/s, '$1') // Extract JSON object
+            .replace(/^[^{]*({[\s\S]*})[^}]*$/, '$1') // Extract JSON object
             .trim();
             
           parsedResponse = JSON.parse(cleanText);
@@ -623,6 +589,7 @@ export async function generateManual(request: GenerateManualRequest): Promise<Ap
     return {
       data: {
         manualId: manual.id,
+        projectName: manual.productName,
         steps,
         materials,
         totalPrice: manual.totalPrice,
@@ -639,6 +606,7 @@ export async function generateManual(request: GenerateManualRequest): Promise<Ap
     return {
       data: {
         manualId: '',
+        projectName: '',
         steps: [],
         materials: [],
         totalPrice: 0,
@@ -685,6 +653,7 @@ export async function generateManualWithRetry(
   return {
     data: {
       manualId: '',
+      projectName: '',
       steps: [],
       materials: [],
       totalPrice: 0,

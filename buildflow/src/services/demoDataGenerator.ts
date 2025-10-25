@@ -325,6 +325,7 @@ export function generateDemoManual(productIdea: string): GenerateManualResponse 
 
   return {
     manualId,
+    projectName: template.projectName,
     steps,
     materials,
     totalPrice: Math.round(totalPrice * 100) / 100,

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Material, ErrorState, LoadingState } from '../types';
+import { Material, ErrorState } from '../types';
 import { formatCurrency } from '../utils/pricing';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
@@ -23,6 +23,14 @@ const MaterialsView: React.FC<MaterialsViewProps> = ({
   loading = false,
   error = null
 }) => {
+  // Debug logging
+  console.log('🔍 MaterialsView received data:', {
+    materialsCount: materials.length,
+    totalPrice,
+    loading,
+    error: error?.message
+  });
+
   const [imageLoadingStates, setImageLoadingStates] = useState<Record<string, boolean>>({});
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 

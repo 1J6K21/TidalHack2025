@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AppMode, LoadingState, ErrorState } from '../types';
+import { AppMode, ErrorState } from '../types';
 import { validateProductIdea } from '../services/manualGeneration';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
@@ -250,7 +250,7 @@ const TextInput: React.FC<TextInputProps> = ({
               >
                 {isSubmitting ? (
                   <div className="flex items-center">
-                    <LoadingSpinner size="xs" />
+                    <LoadingSpinner size="sm" />
                     <span className="ml-2">Generating...</span>
                   </div>
                 ) : (

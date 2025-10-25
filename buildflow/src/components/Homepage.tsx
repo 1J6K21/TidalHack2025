@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Manual, LoadingState, ErrorState } from '../types';
-import { fetchManualsList, prefetchManualDetails } from '../services/manualDataService';
+import { useAppMode, useAppContext } from '../contexts/AppContext';
+import { dataService } from '../services/dataService';
+
 import ManualCard from './ManualCard';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
@@ -16,44 +18,38 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
   const [manuals, setManuals] = useState<Manual[]>([]);
   const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.IDLE);
   const [error, setError] = useState<ErrorState | null>(null);
+  
+  const appMode = useAppMode();
+  const { setLoading } = useAppContext();
 
   useEffect(() => {
     loadManuals();
-  }, []);
+  }, [appMode]); // Reload when mode changes
 
   const loadManuals = async () => {
+    console.log('🔍 Homepage: Loading manuals in mode:', appMode);
     setLoadingState(LoadingState.LOADING);
+    setLoading('manuals', LoadingState.LOADING);
     setError(null);
 
-    // Use hardcoded demo data for testing
-    const demoManuals: Manual[] = [
-      {
-        id: 'keyboard-build-2024',
-        productName: 'Custom Mechanical Keyboard',
-        thumbnailURL: 'https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MECHANICAL-KEYBOARDS-2048px-0673.jpg',
-        firebaseManualPath: 'manuals/demo/keyboard',
-        firebaseImagePath: 'manuals/demo/keyboard/images',
-        createdAt: new Date('2024-01-15T10:30:00.000Z'),
-        totalPrice: 189.99,
-        stepCount: 8
-      },
-      {
-        id: 'lamp-build-2024',
-        productName: 'Modern Table Lamp',
-        thumbnailURL: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRkN3TPaZbJOved98R8ZlCkIN7xFFPHHgLcDkYtYs5vsogHjA1fwjqjl6nW_jgrqEEwd40N2R-BE-0BKGugGirpG8xaseztkqPrPAeJZ-vvYQ3o5DXRJSPl7E0&usqp=CAc&fit=crop',
-        firebaseManualPath: 'manuals/demo/lamp',
-        firebaseImagePath: 'manuals/demo/lamp/images',
-        createdAt: new Date('2024-01-16T14:20:00.000Z'),
-        totalPrice: 45.50,
-        stepCount: 5
-      }
-    ];
-
-    // Simulate loading delay
-    setTimeout(() => {
-      setManuals(demoManuals);
+    try {
+      const manualsData = await dataService.loadManuals(appMode);
+      console.log('✅ Homepage: Loaded manuals:', manualsData);
+      setManuals(manualsData);
       setLoadingState(LoadingState.SUCCESS);
-    }, 1000);
+      setLoading('manuals', LoadingState.SUCCESS);
+    } catch (err) {
+      console.error('❌ Homepage: Error loading manuals:', err);
+      const errorState: ErrorState = {
+        type: 'firebase' as any,
+        message: err instanceof Error ? err.message : 'Failed to load manuals',
+        timestamp: new Date(),
+        retryable: true
+      };
+      setError(errorState);
+      setLoadingState(LoadingState.ERROR);
+      setLoading('manuals', LoadingState.ERROR);
+    }
   };
 
   const handleRetry = () => {
@@ -71,10 +67,16 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
           <p className="text-2xl text-gray-700 mb-2 font-medium">
             vibe build
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
             Generate and visualize DIY projects with AI-powered instructions and materials lists.
             Create step-by-step manuals for any project idea.
           </p>
+          
+          {/* Mode Indicator */}
+          <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+            <div className={`w-2 h-2 rounded-full mr-2 ${appMode === 'demo' ? 'bg-orange-400' : 'bg-green-400'}`}></div>
+            {appMode === 'demo' ? 'Demo Mode' : 'Live Mode'}
+          </div>
         </div>
 
         {/* New Project Button */}
@@ -105,7 +107,7 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
             <div className="max-w-md mx-auto">
               <ErrorMessage
                 error={error}
-                onRetry={error.retryable ? handleRetry : undefined}
+                {...(error.retryable && { onRetry: handleRetry })}
               />
             </div>
           )}

@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, GenerativeModel, GenerationConfig, SafetySetting } from '@google/generative-ai';
+import { GoogleGenerativeAI, GenerativeModel, GenerationConfig, SafetySetting, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 
 // ============================================================================
 // CONFIGURATION AND CONSTANTS
@@ -32,20 +32,20 @@ export const GENERATION_CONFIG: GenerationConfig = {
 // Safety settings to ensure appropriate content
 export const SAFETY_SETTINGS: SafetySetting[] = [
   {
-    category: 'HARM_CATEGORY_HARASSMENT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
   },
   {
-    category: 'HARM_CATEGORY_HATE_SPEECH',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
   },
   {
-    category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
   },
   {
-    category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
   },
 ];
 
@@ -77,9 +77,7 @@ export async function testGeminiConnection(): Promise<{ success: boolean; error?
     }
 
     // Simple test prompt to verify connection
-    const result = await model.generateContent({
-      contents: [{ parts: [{ text: 'Hello, respond with "OK" if you can hear me.' }] }],
-    });
+    const result = await model.generateContent('Hello, respond with "OK" if you can hear me.');
 
     const response = await result.response;
     const text = response.text();
@@ -114,9 +112,7 @@ export async function generateWithGemini(prompt: string): Promise<{
       return { success: false, error: 'Prompt cannot be empty' };
     }
 
-    const result = await model.generateContent({
-      contents: [{ parts: [{ text: prompt.trim() }] }],
-    });
+    const result = await model.generateContent(prompt.trim());
 
     const response = await result.response;
     const content = response.text();

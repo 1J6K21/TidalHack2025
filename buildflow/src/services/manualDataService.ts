@@ -66,7 +66,9 @@ class ManualCache {
     // Implement LRU eviction if cache is full
     if (this.manualDetailsCache.size >= CACHE_CONFIG.maxEntries) {
       const oldestKey = this.manualDetailsCache.keys().next().value;
-      this.manualDetailsCache.delete(oldestKey);
+      if (oldestKey) {
+        this.manualDetailsCache.delete(oldestKey);
+      }
     }
 
     const now = new Date();
@@ -123,15 +125,7 @@ function createNetworkError(message: string, details?: any): ErrorState {
   };
 }
 
-function createFirebaseError(message: string, details?: any): ErrorState {
-  return {
-    type: ErrorType.FIREBASE,
-    message,
-    details,
-    timestamp: new Date(),
-    retryable: true
-  };
-}
+
 
 // ============================================================================
 // RETRY LOGIC IMPLEMENTATION

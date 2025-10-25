@@ -1,40 +1,25 @@
-'use client';
-
 import React from 'react';
 
 interface LoadingSpinnerProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg';
-  color?: 'blue' | 'gray' | 'white';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
   size = 'md', 
-  color = 'blue',
-  className = ''
+  className = '' 
 }) => {
   const sizeClasses = {
-    xs: 'h-3 w-3',
-    sm: 'h-4 w-4',
-    md: 'h-8 w-8',
-    lg: 'h-12 w-12'
-  };
-
-  const colorClasses = {
-    blue: 'border-blue-600',
-    gray: 'border-gray-600',
-    white: 'border-white'
+    sm: 'w-4 h-4',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12'
   };
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
-      <div 
-        className={`animate-spin rounded-full border-b-2 ${sizeClasses[size]} ${colorClasses[color]}`}
-        role="status"
-        aria-label="Loading"
-      >
-        <span className="sr-only">Loading...</span>
-      </div>
+    <div className={`inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] ${sizeClasses[size]} ${className}`} role="status">
+      <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+        Loading...
+      </span>
     </div>
   );
 };
