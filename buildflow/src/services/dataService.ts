@@ -37,7 +37,7 @@ export class DataService {
         id: "keyboard",
         productName: "Custom Mechanical Keyboard",
         thumbnailURL:
-          "https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MECHANICAL-KEYBOARDS-2048px-0673.jpg",
+          "gs://mannyai-d0b04.firebasestorage.app/images/thumbnails/keyboard.jpg",
         firebaseManualPath: "manuals/demo/keyboard",
         firebaseImagePath: "manuals/demo/keyboard/images",
         createdAt: new Date("2024-01-15T10:30:00.000Z"),
@@ -48,7 +48,7 @@ export class DataService {
         id: "lamp",
         productName: "Modern Table Lamp",
         thumbnailURL:
-          "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRkN3TPaZbJOved98R8ZlCkIN7xFFPHHgLcDkYtYs5vsogHjA1fwjqjl6nW_jgrqEEwd40N2R-BE-0BKGugGirpG8xaseztkqPrPAeJZ-vvYQ3o5DXRJSPl7E0&usqp=CAc&fit=crop",
+          "gs://mannyai-d0b04.firebasestorage.app/images/thumbnails/lamp.jpg",
         firebaseManualPath: "manuals/demo/lamp",
         firebaseImagePath: "manuals/demo/lamp/images",
         createdAt: new Date("2024-01-16T14:20:00.000Z"),
@@ -59,7 +59,7 @@ export class DataService {
         id: "TAMU_logo",
         productName: "TAMU Logo Project",
         thumbnailURL:
-          "https://via.placeholder.com/400x300/500000/FFFFFF?text=TAMU+Logo",
+          "gs://mannyai-d0b04.firebasestorage.app/images/thumbnails/TAMU_logo.jpg",
         firebaseManualPath: "manuals/demo/TAMU_logo",
         firebaseImagePath: "manuals/demo/TAMU_logo/images",
         createdAt: new Date("2024-01-17T14:20:00.000Z"),
@@ -181,7 +181,7 @@ export class DataService {
             description:
               "Unpack the PCB and inspect for any damage. Clean the surface with isopropyl alcohol.",
             imageURL:
-              "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/keyboard/images/steps/step-1.jpg",
             estimatedTime: 15,
             tools: ["Isopropyl alcohol", "Lint-free cloth"],
             notes: "Handle the PCB carefully to avoid static damage",
@@ -192,7 +192,7 @@ export class DataService {
             description:
               "Insert mechanical switches into the PCB. Ensure they click into place securely.",
             imageURL:
-              "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/keyboard/images/steps/step-2.jpg",
             estimatedTime: 30,
             tools: ["Mechanical switches"],
             notes: "Test each switch before final installation",
@@ -207,7 +207,7 @@ export class DataService {
             unitPrice: 45.99,
             totalPrice: 45.99,
             imageURL:
-              "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/keyboard/images/materials/pcb.jpg",
             amazonURL:
               "https://www.amazon.com/s?k=mechanical+keyboard+pcb&ref=nb_sb_noss",
             category: "Electronics",
@@ -220,7 +220,7 @@ export class DataService {
             unitPrice: 0.75,
             totalPrice: 45.75,
             imageURL:
-              "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/keyboard/images/materials/switches.jpg",
             amazonURL:
               "https://www.amazon.com/s?k=cherry+mx+switches&ref=nb_sb_noss",
             category: "Electronics",
@@ -238,7 +238,7 @@ export class DataService {
             description:
               "Sand the wooden base smooth and apply wood stain evenly.",
             imageURL:
-              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/lamp/images/steps/step-1.jpg",
             estimatedTime: 20,
             tools: ["Sandpaper", "Wood stain", "Brush"],
             notes: "Work in a well-ventilated area",
@@ -249,7 +249,7 @@ export class DataService {
             description:
               "Thread the electrical wire through the base and connect to the socket.",
             imageURL:
-              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/lamp/images/steps/step-2.jpg",
             estimatedTime: 25,
             tools: ["Wire strippers", "Screwdriver"],
             notes: "Ensure power is disconnected during wiring",
@@ -264,7 +264,7 @@ export class DataService {
             unitPrice: 15.99,
             totalPrice: 15.99,
             imageURL:
-              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/lamp/images/materials/wood-base.jpg",
             amazonURL:
               "https://www.amazon.com/s?k=wooden+lamp+base&ref=nb_sb_noss",
             category: "Wood",
@@ -277,7 +277,7 @@ export class DataService {
             unitPrice: 8.5,
             totalPrice: 8.5,
             imageURL:
-              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/lamp/images/materials/socket.jpg",
             amazonURL:
               "https://www.amazon.com/s?k=lamp+socket+e26&ref=nb_sb_noss",
             category: "Electronics",
@@ -295,7 +295,7 @@ export class DataService {
             description:
               "Create the TAMU logo design using vector graphics software and prepare for cutting.",
             imageURL:
-              "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/steps/step-1.jpg",
             estimatedTime: 30,
             tools: ["Computer", "Design software", "Printer"],
             notes: "Ensure logo proportions are accurate",
@@ -306,7 +306,7 @@ export class DataService {
             description:
               "Cut the wooden base to the required dimensions for the logo display.",
             imageURL:
-              "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/steps/step-2.jpg",
             estimatedTime: 25,
             tools: ["Saw", "Sandpaper", "Measuring tape"],
             notes: "Sand all edges smooth",
@@ -317,7 +317,7 @@ export class DataService {
             description:
               "Transfer the TAMU logo design to the base material using stencils or vinyl.",
             imageURL:
-              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/steps/step-3.jpg",
             estimatedTime: 40,
             tools: ["Stencils", "Paint", "Brushes"],
             notes: "Use official TAMU colors: maroon and white",
@@ -332,7 +332,7 @@ export class DataService {
             unitPrice: 25.99,
             totalPrice: 25.99,
             imageURL:
-              "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/materials/5198MshnbaL._AC_SL1000_.jpg",
             amazonURL:
               "https://www.amazon.com/s?k=wooden+display+base&ref=nb_sb_noss",
             category: "Wood",
@@ -345,7 +345,7 @@ export class DataService {
             unitPrice: 12.99,
             totalPrice: 12.99,
             imageURL:
-              "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/materials/maroon-paint.jpg",
             amazonURL: "https://www.amazon.com/s?k=maroon+paint&ref=nb_sb_noss",
             category: "Paint",
           },
@@ -357,7 +357,7 @@ export class DataService {
             unitPrice: 9.99,
             totalPrice: 9.99,
             imageURL:
-              "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=200&h=150&fit=crop&crop=center",
+              "gs://mannyai-d0b04.firebasestorage.app/manuals/demo/TAMU_logo/images/materials/white-paint.jpg",
             amazonURL: "https://www.amazon.com/s?k=white+paint&ref=nb_sb_noss",
             category: "Paint",
           },

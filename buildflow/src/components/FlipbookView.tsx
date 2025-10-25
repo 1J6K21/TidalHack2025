@@ -440,16 +440,44 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
                 </div>
                 <h3 className="text-base font-semibold text-gray-900">Tools Needed</h3>
               </div>
-              <div className="space-y-1">
-                {step.tools.map((tool, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-sm"
-                  >
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-800 font-medium">{tool}</span>
-                  </div>
-                ))}
+              <div className="space-y-2">
+                {step.tools.map((tool, index) => {
+                  // Find matching material for this tool
+                  const matchingMaterial = materials.find(material => 
+                    material.name.toLowerCase().includes(tool.toLowerCase()) ||
+                    tool.toLowerCase().includes(material.name.toLowerCase().split(' ')[0])
+                  );
+                  
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg text-sm hover:bg-gray-100 transition-colors duration-200"
+                    >
+                      {/* Material image if found */}
+                      {matchingMaterial ? (
+                        <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                          <ProgressiveImage
+                            src={matchingMaterial.imageURL}
+                            alt={matchingMaterial.name}
+                            width="32"
+                            height="32"
+                            className="w-full h-full object-cover"
+                            skeletonClassName="w-8 h-8"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                      )}
+                      <span className="text-gray-800 font-medium flex-1">{tool}</span>
+                      {matchingMaterial && (
+                        <span className="text-xs text-gray-500">
+                          {formatCurrency(matchingMaterial.unitPrice)}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -661,7 +689,7 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
         </div>
 
         {/* Page Content */}
-        <div className="flex-1 relative overflow-hidden perspective-1000">
+        <div className="flex-1 relative perspective-1000">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentPage}
