@@ -1,16 +1,15 @@
-
 {
-"mcpServers": {
-"figma": {
-"command": "npx",
-"args": [
-"-y",
-"figma-developer-mcp",
-"--figma-api-key=figd_z3IiJwWrjxAYa56B3XM_p9gUBhZc2jQdBpuIMttm",
-"--stdio"
-],
-"disabled": false,
-"autoApprove": ["get_figma_data", "download_figma_images"]
-}
-}
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "figd_Tw_tR0k-Oz8ZVy4LegoK8eyWxMgErlDM-eQTm00k",
+        "--stdio"
+      ],
+      "disabled": false,
+      "autoApprove": ["get_figma_data", "download_figma_images"]
+    }
+  }
 }

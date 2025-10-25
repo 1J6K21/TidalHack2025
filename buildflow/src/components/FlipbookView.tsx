@@ -39,8 +39,8 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   const [visitedPages, setVisitedPages] = useState<Set<number>>(new Set([0]));
   const [navigationHistory, setNavigationHistory] = useState<number[]>([0]);
 
-  // Total pages = materials page + step pages
-  const totalPages = 1 + steps.length;
+  // Total pages = materials page + step pages + congratulation page
+  const totalPages = 1 + steps.length + 1;
 
   // State persistence key
   const stateKey = `flipbook-${projectName.replace(/\s+/g, '-').toLowerCase()}`;
@@ -174,27 +174,39 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
     }
   };
 
-  // Animation variants for page transitions
+  // Enhanced animation variants for realistic page flip
   const pageVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0
+      rotateY: direction > 0 ? 90 : -90,
+      opacity: 0,
+      scale: 0.8,
+      transformOrigin: direction > 0 ? "left center" : "right center",
+      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
     }),
     center: {
       zIndex: 1,
-      x: 0,
-      opacity: 1
+      rotateY: 0,
+      opacity: 1,
+      scale: 1,
+      transformOrigin: "center center",
+      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0
+      rotateY: direction < 0 ? 90 : -90,
+      opacity: 0,
+      scale: 0.8,
+      transformOrigin: direction < 0 ? "left center" : "right center",
+      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
     })
   };
 
   const pageTransition = {
-    x: { type: "spring" as const, stiffness: 300, damping: 30 },
-    opacity: { duration: 0.2 }
+    type: "spring" as const,
+    stiffness: 200,
+    damping: 25,
+    mass: 1,
+    duration: 0.6
   };
 
   if (loading) {
@@ -216,49 +228,83 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   }
 
   const renderMaterialsPage = () => (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden">
       {/* Page Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Materials Overview</h2>
-        <p className="text-gray-600">Required materials for {projectName}</p>
+      <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
+        
+        <div className="relative z-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl mb-4 border border-white border-opacity-30">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 className="text-3xl font-bold mb-2">Materials Overview</h2>
+          <p className="text-purple-100">Everything you need for {projectName}</p>
+          <div className="mt-4 flex items-center justify-center gap-6 text-sm text-purple-100">
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              {materials.length} items
+            </span>
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+              {formatCurrency(materials.reduce((sum, material) => sum + material.totalPrice, 0))} total
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Materials Grid */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
           {materials.map((material) => (
             <div
               key={material.id}
-              className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 ${
-                material.amazonURL ? 'cursor-pointer hover:scale-105' : ''
+              className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 ${
+                material.amazonURL ? 'cursor-pointer hover:scale-105 hover:-translate-y-1' : ''
               }`}
               onClick={() => handleMaterialClick(material)}
             >
               {/* Material Image */}
-              <div className="relative h-24 bg-gray-200">
+              <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200">
                 <ProgressiveImage
                   src={material.imageURL}
                   alt={material.name}
                   width="100%"
-                  height="6rem"
+                  height="8rem"
                   className="w-full h-full object-cover"
-                  skeletonClassName="h-24"
+                  skeletonClassName="h-32"
                   loading="lazy"
                 />
 
                 {/* Amazon Link Indicator */}
                 {material.amazonURL && (
-                  <div className="absolute top-1 right-1">
-                    <div className="bg-orange-500 text-white text-xs px-1 py-0.5 rounded-full font-semibold">
-                      Amazon
+                  <div className="absolute top-2 right-2">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs px-2 py-1 rounded-full font-semibold shadow-lg flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M.045 18.02c9.715.522 16.728 1.227 16.728 1.227.329-2.52-.49-4.427-.49-4.427-5.913-1.227-16.238-1.227-16.238-1.227s-.329 1.848 0 4.427zm8.953-8.515c0-6.09-2.47-8.515-5.913-8.515-2.47 0-4.427 1.227-4.427 1.227s1.227 3.697 1.227 7.288c0 2.47.49 3.697.49 3.697 2.47-.49 5.913-.49 8.623-.49v-3.207zm6.09 4.427c0-1.227-.49-2.47-.49-2.47-1.227 0-2.47.49-2.47.49v8.515s1.227.49 2.47.49c1.227 0 .49-1.227.49-2.47v-4.555zm8.515-4.427c0-6.09-2.47-8.515-5.913-8.515-2.47 0-4.427 1.227-4.427 1.227s1.227 3.697 1.227 7.288c0 2.47.49 3.697.49 3.697 2.47-.49 5.913-.49 8.623-.49v-3.207z"/>
+                      </svg>
+                      Buy
                     </div>
                   </div>
                 )}
+
+                {/* Quantity badge */}
+                <div className="absolute bottom-2 left-2">
+                  <div className="bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full font-medium backdrop-blur-sm">
+                    Qty: {material.quantity}
+                  </div>
+                </div>
               </div>
 
               {/* Material Details */}
-              <div className="p-3">
-                <h4 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-1">
+              <div className="p-4">
+                <h4 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-2 leading-tight">
                   {material.name}
                 </h4>
                 
@@ -293,68 +339,101 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   );
 
   const renderStepPage = (step: Step) => (
-    <div className="h-full flex flex-col">
-      {/* Step Header */}
-      <div className="text-center mb-6">
-        <div className="flex items-center justify-center mb-2">
-          <div className="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">
-            {step.stepNumber}
+    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden">
+      {/* Step Header with Modern Design */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
+        
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl w-16 h-16 flex items-center justify-center font-bold text-2xl border border-white border-opacity-30">
+              {step.stepNumber}
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold mb-1">{step.title}</h2>
+              <div className="flex items-center gap-4 text-blue-100">
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {step.estimatedTime} min
+                </span>
+                {step.tools.length > 0 && (
+                  <span className="flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {step.tools.length} tools
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{step.title}</h2>
-        <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {step.estimatedTime} min
-          </span>
-          {step.tools.length > 0 && (
-            <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {step.tools.length} tools
-            </span>
-          )}
+          
+          {/* Progress indicator */}
+          <div className="text-right">
+            <div className="text-blue-100 text-sm">Step</div>
+            <div className="text-2xl font-bold">{step.stepNumber}</div>
+            <div className="text-blue-200 text-xs">of {steps.length}</div>
+          </div>
         </div>
       </div>
 
       {/* Step Content */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-6">
+      <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
         {/* Step Image */}
-        <div className="lg:w-1/2">
-          <div className="relative bg-gray-200 rounded-lg overflow-hidden h-64 lg:h-full">
+        <div className="lg:w-3/5">
+          <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden h-80 lg:h-full shadow-inner">
             <ProgressiveImage
               src={step.imageURL}
               alt={`Step ${step.stepNumber}: ${step.title}`}
               width="100%"
               height="100%"
-              className="w-full h-full object-cover rounded-lg"
-              skeletonClassName="h-full rounded-lg"
+              className="w-full h-full object-cover rounded-2xl"
+              skeletonClassName="h-full rounded-2xl"
               loading="eager"
               retryable={true}
             />
+            
+            {/* Image overlay with step number */}
+            <div className="absolute top-4 left-4 bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-sm shadow-lg">
+              {step.stepNumber}
+            </div>
+            
+            {/* Zoom indicator */}
+            <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white rounded-lg px-2 py-1 text-xs backdrop-blur-sm">
+              Click to zoom
+            </div>
           </div>
         </div>
 
         {/* Step Details */}
-        <div className="lg:w-1/2 flex flex-col">
-          {/* Description */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-4 flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Instructions</h3>
-            <p className="text-gray-700 leading-relaxed">{step.description}</p>
+        <div className="lg:w-2/5 flex flex-col space-y-4">
+          {/* Description Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 flex-1 border border-gray-100">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Instructions</h3>
+            </div>
+            <p className="text-gray-700 leading-relaxed text-base">{step.description}</p>
             
             {step.notes && (
-              <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                <div className="flex">
-                  <svg className="w-5 h-5 text-yellow-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                  </svg>
+              <div className="mt-6 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                  </div>
                   <div>
-                    <p className="text-sm font-medium text-yellow-800">Note:</p>
-                    <p className="text-sm text-yellow-700">{step.notes}</p>
+                    <p className="text-sm font-semibold text-amber-800 mb-1">💡 Pro Tip</p>
+                    <p className="text-sm text-amber-700 leading-relaxed">{step.notes}</p>
                   </div>
                 </div>
               </div>
@@ -363,22 +442,203 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
 
           {/* Tools Required */}
           {step.tools.length > 0 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Tools Required</h3>
-              <div className="flex flex-wrap gap-2">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">Tools Needed</h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
                 {step.tools.map((tool, index) => (
-                  <span
+                  <div
                     key={index}
-                    className="inline-block bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full"
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200"
                   >
-                    {tool}
-                  </span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-gray-800 font-medium">{tool}</span>
+                  </div>
                 ))}
               </div>
             </div>
           )}
         </div>
       </div>
+    </div>
+  );
+
+  const renderCongratulationPage = () => (
+    <div className="h-full flex flex-col items-center justify-center text-center">
+      {/* Celebration Animation */}
+      <motion.div
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+        className="mb-8"
+      >
+        <div className="relative">
+          {/* Trophy Icon */}
+          <div className="w-32 h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl">
+            <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          
+          {/* Confetti Animation */}
+          <motion.div
+            animate={{ 
+              rotate: [0, 360],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ 
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute -top-4 -right-4 w-8 h-8 text-yellow-400"
+          >
+            ✨
+          </motion.div>
+          <motion.div
+            animate={{ 
+              rotate: [360, 0],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{ 
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 0.5
+            }}
+            className="absolute -bottom-2 -left-4 w-6 h-6 text-yellow-300"
+          >
+            🎉
+          </motion.div>
+          <motion.div
+            animate={{ 
+              y: [-10, 10, -10],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-4 h-4 text-yellow-500"
+          >
+            ⭐
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Congratulation Text */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+        className="mb-8"
+      >
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          Congratulations! 🎊
+        </h1>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+          You've completed your {projectName}!
+        </h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          You've successfully followed all {steps.length} steps and should now have a beautiful, 
+          handcrafted {projectName.toLowerCase()}. Great job on completing this DIY project!
+        </p>
+      </motion.div>
+
+      {/* Project Summary */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="bg-white rounded-2xl shadow-xl p-8 mb-8 max-w-md w-full"
+      >
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Project Summary</h3>
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Steps Completed:</span>
+            <span className="font-semibold text-green-600">{steps.length}/{steps.length}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Materials Used:</span>
+            <span className="font-semibold text-blue-600">{materials.length} items</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Total Investment:</span>
+            <span className="font-semibold text-purple-600">
+              {formatCurrency(materials.reduce((sum, material) => sum + material.totalPrice, 0))}
+            </span>
+          </div>
+          <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+            <span className="text-gray-600">Estimated Time:</span>
+            <span className="font-semibold text-orange-600">
+              {steps.reduce((sum, step) => sum + step.estimatedTime, 0)} minutes
+            </span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Action Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.1, duration: 0.5 }}
+        className="flex flex-col sm:flex-row gap-4"
+      >
+        <button
+          onClick={() => setCurrentPage(0)}
+          className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Review Instructions
+        </button>
+        
+        <button
+          onClick={onCancel}
+          className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 shadow-lg hover:shadow-xl"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Back to Home
+        </button>
+      </motion.div>
+
+      {/* Share Achievement */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 0.5 }}
+        className="mt-8 text-center"
+      >
+        <p className="text-sm text-gray-500 mb-3">Share your achievement!</p>
+        <div className="flex justify-center gap-3">
+          <button className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            </svg>
+          </button>
+          <button className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+          <button className="w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+            </svg>
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 
@@ -413,7 +673,7 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
         </div>
 
         {/* Page Content */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden perspective-1000">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentPage}
@@ -423,9 +683,49 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
               animate="center"
               exit="exit"
               transition={pageTransition}
-              className="absolute inset-0 bg-white rounded-lg shadow-lg p-8"
+              className="absolute inset-0 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+              style={{
+                transformStyle: "preserve-3d",
+                backfaceVisibility: "hidden",
+                background: `
+                  radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.02) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.02) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.02) 0%, transparent 50%),
+                  linear-gradient(135deg, #ffffff 0%, #fafafa 100%)
+                `
+              }}
             >
-              {currentPage === 0 ? renderMaterialsPage() : renderStepPage(steps[currentPage - 1])}
+              {/* Subtle paper texture overlay */}
+              <div 
+                className="absolute inset-0 opacity-30 pointer-events-none"
+                style={{
+                  backgroundImage: `
+                    repeating-linear-gradient(
+                      0deg,
+                      transparent,
+                      transparent 2px,
+                      rgba(0,0,0,0.01) 2px,
+                      rgba(0,0,0,0.01) 4px
+                    ),
+                    repeating-linear-gradient(
+                      90deg,
+                      transparent,
+                      transparent 2px,
+                      rgba(0,0,0,0.01) 2px,
+                      rgba(0,0,0,0.01) 4px
+                    )
+                  `
+                }}
+              />
+              
+              {/* Page content */}
+              <div className="relative z-10 h-full">
+                {currentPage === 0 
+                  ? renderMaterialsPage() 
+                  : currentPage === totalPages - 1 
+                  ? renderCongratulationPage()
+                  : renderStepPage(steps[currentPage - 1])}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -539,7 +839,11 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
               Page {currentPage + 1} of {totalPages}
             </span>
             <span className="ml-2">
-              {currentPage === 0 ? '(Materials Overview)' : `(Step ${currentPage})`}
+              {currentPage === 0 
+                ? '(Materials Overview)' 
+                : currentPage === totalPages - 1 
+                ? '(Congratulations!)' 
+                : `(Step ${currentPage})`}
             </span>
           </div>
 
