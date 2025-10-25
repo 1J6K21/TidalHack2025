@@ -174,39 +174,38 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
     }
   };
 
-  // Enhanced animation variants for realistic page flip
+  // Realistic notebook page flip animation
   const pageVariants = {
     enter: (direction: number) => ({
-      rotateY: direction > 0 ? 90 : -90,
+      x: direction > 0 ? "100%" : "-100%",
+      rotateY: direction > 0 ? -15 : 15,
       opacity: 0,
-      scale: 0.8,
-      transformOrigin: direction > 0 ? "left center" : "right center",
-      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+      scale: 0.95,
+      transformOrigin: direction > 0 ? "left center" : "right center"
     }),
     center: {
-      zIndex: 1,
+      x: "0%",
       rotateY: 0,
       opacity: 1,
       scale: 1,
       transformOrigin: "center center",
-      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+      zIndex: 1
     },
     exit: (direction: number) => ({
-      zIndex: 0,
-      rotateY: direction < 0 ? 90 : -90,
+      x: direction < 0 ? "100%" : "-100%",
+      rotateY: direction < 0 ? -15 : 15,
       opacity: 0,
-      scale: 0.8,
+      scale: 0.95,
       transformOrigin: direction < 0 ? "left center" : "right center",
-      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+      zIndex: 0
     })
   };
 
   const pageTransition = {
     type: "spring" as const,
-    stiffness: 200,
-    damping: 25,
-    mass: 1,
-    duration: 0.6
+    stiffness: 300,
+    damping: 30,
+    mass: 0.8
   };
 
   if (loading) {
@@ -228,29 +227,26 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   }
 
   const renderMaterialsPage = () => (
-    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden">
-      {/* Page Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
-        
-        <div className="relative z-10 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl mb-4 border border-white border-opacity-30">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="h-full flex flex-col">
+      {/* Page Header - Compact */}
+      <div className="flex-shrink-0 bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-2xl">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-xl mb-2 border border-white border-opacity-30">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold mb-2">Materials Overview</h2>
-          <p className="text-purple-100">Everything you need for {projectName}</p>
-          <div className="mt-4 flex items-center justify-center gap-6 text-sm text-purple-100">
+          <h2 className="text-xl font-bold mb-1">Materials Overview</h2>
+          <p className="text-purple-100 text-sm">Everything you need for {projectName}</p>
+          <div className="mt-2 flex items-center justify-center gap-4 text-xs text-purple-100">
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
               </svg>
               {materials.length} items
             </span>
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
               </svg>
               {formatCurrency(materials.reduce((sum, material) => sum + material.totalPrice, 0))} total
@@ -260,8 +256,8 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
       </div>
 
       {/* Materials Grid */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+      <div className="flex-1 p-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-full">
           {materials.map((material) => (
             <div
               key={material.id}
@@ -339,29 +335,26 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   );
 
   const renderStepPage = (step: Step) => (
-    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden">
-      {/* Step Header with Modern Design */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
-        
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl w-16 h-16 flex items-center justify-center font-bold text-2xl border border-white border-opacity-30">
+    <div className="h-full flex flex-col">
+      {/* Step Header - Fixed at top */}
+      <div className="flex-shrink-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-t-2xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl w-12 h-12 flex items-center justify-center font-bold text-xl border border-white border-opacity-30">
               {step.stepNumber}
             </div>
             <div>
-              <h2 className="text-2xl font-bold mb-1">{step.title}</h2>
-              <div className="flex items-center gap-4 text-blue-100">
+              <h2 className="text-xl font-bold mb-1">{step.title}</h2>
+              <div className="flex items-center gap-3 text-blue-100 text-sm">
                 <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {step.estimatedTime} min
                 </span>
                 {step.tools.length > 0 && (
                   <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -374,66 +367,61 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
           
           {/* Progress indicator */}
           <div className="text-right">
-            <div className="text-blue-100 text-sm">Step</div>
-            <div className="text-2xl font-bold">{step.stepNumber}</div>
+            <div className="text-blue-100 text-xs">Step</div>
+            <div className="text-lg font-bold">{step.stepNumber}</div>
             <div className="text-blue-200 text-xs">of {steps.length}</div>
           </div>
         </div>
       </div>
 
       {/* Step Content */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
+      <div className="flex-1 flex flex-col lg:flex-row gap-4 p-4 min-h-0">
         {/* Step Image */}
-        <div className="lg:w-3/5">
-          <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden h-80 lg:h-full shadow-inner">
+        <div className="lg:w-3/5 flex-shrink-0">
+          <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden h-64 lg:h-full shadow-inner">
             <ProgressiveImage
               src={step.imageURL}
               alt={`Step ${step.stepNumber}: ${step.title}`}
               width="100%"
               height="100%"
-              className="w-full h-full object-cover rounded-2xl"
-              skeletonClassName="h-full rounded-2xl"
+              className="w-full h-full object-cover rounded-xl"
+              skeletonClassName="h-full rounded-xl"
               loading="eager"
               retryable={true}
             />
             
             {/* Image overlay with step number */}
-            <div className="absolute top-4 left-4 bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-sm shadow-lg">
+            <div className="absolute top-3 left-3 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm shadow-lg">
               {step.stepNumber}
-            </div>
-            
-            {/* Zoom indicator */}
-            <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white rounded-lg px-2 py-1 text-xs backdrop-blur-sm">
-              Click to zoom
             </div>
           </div>
         </div>
 
         {/* Step Details */}
-        <div className="lg:w-2/5 flex flex-col space-y-4">
+        <div className="lg:w-2/5 flex flex-col space-y-3 min-h-0">
           {/* Description Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 flex-1 border border-gray-100">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white rounded-xl shadow-lg p-4 flex-1 border border-gray-100 min-h-0">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Instructions</h3>
+              <h3 className="text-base font-semibold text-gray-900">Instructions</h3>
             </div>
-            <p className="text-gray-700 leading-relaxed text-base">{step.description}</p>
+            <p className="text-gray-700 leading-relaxed text-sm">{step.description}</p>
             
             {step.notes && (
-              <div className="mt-6 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg className="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mt-3 p-3 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <div className="w-4 h-4 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-2 h-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-amber-800 mb-1">💡 Pro Tip</p>
-                    <p className="text-sm text-amber-700 leading-relaxed">{step.notes}</p>
+                    <p className="text-xs font-semibold text-amber-800 mb-1">💡 Pro Tip</p>
+                    <p className="text-xs text-amber-700 leading-relaxed">{step.notes}</p>
                   </div>
                 </div>
               </div>
@@ -442,23 +430,23 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
 
           {/* Tools Required */}
           {step.tools.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-100 flex-shrink-0">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Tools Needed</h3>
+                <h3 className="text-base font-semibold text-gray-900">Tools Needed</h3>
               </div>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="space-y-1">
                 {step.tools.map((tool, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+                    className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-sm"
                   >
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                     <span className="text-gray-800 font-medium">{tool}</span>
                   </div>
                 ))}
@@ -643,8 +631,8 @@ const FlipbookView: React.FC<FlipbookViewProps> = ({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8 h-screen flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+      <div className="container mx-auto px-4 py-6 flex-1 flex flex-col max-h-screen">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">

@@ -1,6 +1,12 @@
-import { AppMode, Manual, Step, Material, GenerateManualResponse } from '../types';
-import { firebaseService } from './firebaseService';
-import { manualGenerationService } from './manualGenerationService';
+import {
+  AppMode,
+  Manual,
+  Step,
+  Material,
+  GenerateManualResponse,
+} from "../types";
+import { firebaseService } from "./firebaseService";
+import { manualGenerationService } from "./manualGenerationService";
 
 // ============================================================================
 // DATA SERVICE - MODE-SPECIFIC DATA LOADING
@@ -22,44 +28,50 @@ export class DataService {
    * Load demo manuals from Firebase Cloud Storage
    */
   private static async loadDemoManuals(): Promise<Manual[]> {
-    console.log('🔍 Loading demo manuals...');
-    
+    console.log("🔍 Loading demo manuals...");
+
     // For now, always use fallback data since Firebase is not fully configured
     // In a real implementation, this would try Firebase first
     const fallbackManuals: Manual[] = [
       {
-        id: 'keyboard',
-        productName: 'Custom Mechanical Keyboard',
-        thumbnailURL: 'https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MECHANICAL-KEYBOARDS-2048px-0673.jpg',
-        firebaseManualPath: 'manuals/demo/keyboard',
-        firebaseImagePath: 'manuals/demo/keyboard/images',
-        createdAt: new Date('2024-01-15T10:30:00.000Z'),
+        id: "keyboard",
+        productName: "Custom Mechanical Keyboard",
+        thumbnailURL:
+          "https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MECHANICAL-KEYBOARDS-2048px-0673.jpg",
+        firebaseManualPath: "manuals/demo/keyboard",
+        firebaseImagePath: "manuals/demo/keyboard/images",
+        createdAt: new Date("2024-01-15T10:30:00.000Z"),
         totalPrice: 189.99,
-        stepCount: 8
+        stepCount: 8,
       },
       {
-        id: 'lamp',
-        productName: 'Modern Table Lamp',
-        thumbnailURL: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRkN3TPaZbJOved98R8ZlCkIN7xFFPHHgLcDkYtYs5vsogHjA1fwjqjl6nW_jgrqEEwd40N2R-BE-0BKGugGirpG8xaseztkqPrPAeJZ-vvYQ3o5DXRJSPl7E0&usqp=CAc&fit=crop',
-        firebaseManualPath: 'manuals/demo/lamp',
-        firebaseImagePath: 'manuals/demo/lamp/images',
-        createdAt: new Date('2024-01-16T14:20:00.000Z'),
-        totalPrice: 45.50,
-        stepCount: 5
+        id: "lamp",
+        productName: "Modern Table Lamp",
+        thumbnailURL:
+          "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRkN3TPaZbJOved98R8ZlCkIN7xFFPHHgLcDkYtYs5vsogHjA1fwjqjl6nW_jgrqEEwd40N2R-BE-0BKGugGirpG8xaseztkqPrPAeJZ-vvYQ3o5DXRJSPl7E0&usqp=CAc&fit=crop",
+        firebaseManualPath: "manuals/demo/lamp",
+        firebaseImagePath: "manuals/demo/lamp/images",
+        createdAt: new Date("2024-01-16T14:20:00.000Z"),
+        totalPrice: 45.5,
+        stepCount: 5,
       },
       {
-        id: 'TAMU_logo',
-        productName: 'TAMU Logo Project',
-        thumbnailURL: 'https://via.placeholder.com/400x300/500000/FFFFFF?text=TAMU+Logo',
-        firebaseManualPath: 'manuals/demo/TAMU_logo',
-        firebaseImagePath: 'manuals/demo/TAMU_logo/images',
-        createdAt: new Date('2024-01-17T14:20:00.000Z'),
-        totalPrice: 75.00,
-        stepCount: 6
-      }
+        id: "TAMU_logo",
+        productName: "TAMU Logo Project",
+        thumbnailURL:
+          "https://via.placeholder.com/400x300/500000/FFFFFF?text=TAMU+Logo",
+        firebaseManualPath: "manuals/demo/TAMU_logo",
+        firebaseImagePath: "manuals/demo/TAMU_logo/images",
+        createdAt: new Date("2024-01-17T14:20:00.000Z"),
+        totalPrice: 75.0,
+        stepCount: 6,
+      },
     ];
-    
-    console.log('✅ Loaded demo manuals:', fallbackManuals.map(m => ({ id: m.id, name: m.productName })));
+
+    console.log(
+      "✅ Loaded demo manuals:",
+      fallbackManuals.map((m) => ({ id: m.id, name: m.productName }))
+    );
     return fallbackManuals;
   }
 
@@ -72,8 +84,8 @@ export class DataService {
       // For now, return empty array as users haven't generated any yet
       return [];
     } catch (error) {
-      console.error('Error loading user manuals:', error);
-      throw new Error('Failed to load user manuals');
+      console.error("Error loading user manuals:", error);
+      throw new Error("Failed to load user manuals");
     }
   }
 
@@ -81,7 +93,7 @@ export class DataService {
    * Load manual data (steps and materials) based on mode
    */
   static async loadManualData(
-    manual: Manual, 
+    manual: Manual,
     mode: AppMode
   ): Promise<{ steps: Step[]; materials: Material[] }> {
     if (mode === AppMode.DEMO) {
@@ -97,18 +109,18 @@ export class DataService {
   private static async loadDemoManualData(
     manual: Manual
   ): Promise<{ steps: Step[]; materials: Material[] }> {
-    console.log('🔍 Loading demo manual data for:', manual.id);
-    
+    console.log("🔍 Loading demo manual data for:", manual.id);
+
     // For now, always use fallback data since Firebase is not fully configured
     // In a real implementation, this would try Firebase first
     const data = this.getFallbackDemoData(manual.id);
-    
-    console.log('✅ Loaded demo manual data:', {
+
+    console.log("✅ Loaded demo manual data:", {
       manualId: manual.id,
       stepsCount: data.steps.length,
-      materialsCount: data.materials.length
+      materialsCount: data.materials.length,
     });
-    
+
     return data;
   }
 
@@ -120,12 +132,14 @@ export class DataService {
   ): Promise<{ steps: Step[]; materials: Material[] }> {
     try {
       const steps = await firebaseService.getSteps(manual.firebaseManualPath);
-      const materials = await firebaseService.getMaterials(manual.firebaseManualPath);
-      
+      const materials = await firebaseService.getMaterials(
+        manual.firebaseManualPath
+      );
+
       return { steps, materials };
     } catch (error) {
-      console.error('Error loading generated manual data:', error);
-      throw new Error('Failed to load manual data');
+      console.error("Error loading generated manual data:", error);
+      throw new Error("Failed to load manual data");
     }
   }
 
@@ -133,199 +147,228 @@ export class DataService {
    * Generate new manual using AI (live mode only)
    */
   static async generateManual(
-    productIdea: string, 
+    productIdea: string,
     mode: AppMode
   ): Promise<GenerateManualResponse> {
     if (mode === AppMode.DEMO) {
-      throw new Error('Manual generation is disabled in demo mode');
+      throw new Error("Manual generation is disabled in demo mode");
     }
 
     try {
       return await manualGenerationService.generateManual({
         productIdea,
-        userId: 'testuser' // In real app, this would come from auth
+        userId: "testuser", // In real app, this would come from auth
       });
     } catch (error) {
-      console.error('Error generating manual:', error);
-      throw new Error('Failed to generate manual');
+      console.error("Error generating manual:", error);
+      throw new Error("Failed to generate manual");
     }
   }
 
   /**
    * Get fallback demo data when Firebase fails
    */
-  private static getFallbackDemoData(manualId: string): { steps: Step[]; materials: Material[] } {
-    if (manualId === 'keyboard-build-2024' || manualId === 'keyboard') {
+  private static getFallbackDemoData(manualId: string): {
+    steps: Step[];
+    materials: Material[];
+  } {
+    if (manualId === "keyboard-build-2024" || manualId === "keyboard") {
       return {
         steps: [
           {
             stepNumber: 1,
-            title: 'Prepare the PCB',
-            description: 'Unpack the PCB and inspect for any damage. Clean the surface with isopropyl alcohol.',
-            imageURL: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Step+1',
+            title: "Prepare the PCB",
+            description:
+              "Unpack the PCB and inspect for any damage. Clean the surface with isopropyl alcohol.",
+            imageURL:
+              "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 15,
-            tools: ['Isopropyl alcohol', 'Lint-free cloth'],
-            notes: 'Handle the PCB carefully to avoid static damage'
+            tools: ["Isopropyl alcohol", "Lint-free cloth"],
+            notes: "Handle the PCB carefully to avoid static damage",
           },
           {
             stepNumber: 2,
-            title: 'Install Switches',
-            description: 'Insert mechanical switches into the PCB. Ensure they click into place securely.',
-            imageURL: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Step+2',
+            title: "Install Switches",
+            description:
+              "Insert mechanical switches into the PCB. Ensure they click into place securely.",
+            imageURL:
+              "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 30,
-            tools: ['Mechanical switches'],
-            notes: 'Test each switch before final installation'
-          }
+            tools: ["Mechanical switches"],
+            notes: "Test each switch before final installation",
+          },
         ],
         materials: [
           {
-            id: 'pcb-60-percent',
-            name: '60% Mechanical Keyboard PCB',
-            description: 'Hot-swappable PCB with USB-C connector',
+            id: "pcb-60-percent",
+            name: "60% Mechanical Keyboard PCB",
+            description: "Hot-swappable PCB with USB-C connector",
             quantity: 1,
             unitPrice: 45.99,
             totalPrice: 45.99,
-            imageURL: 'https://via.placeholder.com/200x150/4F46E5/FFFFFF?text=PCB',
-            amazonURL: 'https://amazon.com/keyboard-pcb',
-            category: 'Electronics'
+            imageURL:
+              "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=200&h=150&fit=crop&crop=center",
+            amazonURL:
+              "https://www.amazon.com/s?k=mechanical+keyboard+pcb&ref=nb_sb_noss",
+            category: "Electronics",
           },
           {
-            id: 'switches-cherry-mx',
-            name: 'Cherry MX Blue Switches',
-            description: 'Tactile mechanical switches with audible click',
+            id: "switches-cherry-mx",
+            name: "Cherry MX Blue Switches",
+            description: "Tactile mechanical switches with audible click",
             quantity: 61,
             unitPrice: 0.75,
             totalPrice: 45.75,
-            imageURL: 'https://via.placeholder.com/200x150/4F46E5/FFFFFF?text=Switches',
-            amazonURL: 'https://amazon.com/cherry-mx-switches',
-            category: 'Electronics'
-          }
-        ]
+            imageURL:
+              "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=200&h=150&fit=crop&crop=center",
+            amazonURL:
+              "https://www.amazon.com/s?k=cherry+mx+switches&ref=nb_sb_noss",
+            category: "Electronics",
+          },
+        ],
       };
     }
 
-    if (manualId === 'lamp-build-2024' || manualId === 'lamp') {
+    if (manualId === "lamp-build-2024" || manualId === "lamp") {
       return {
         steps: [
           {
             stepNumber: 1,
-            title: 'Prepare the Base',
-            description: 'Sand the wooden base smooth and apply wood stain evenly.',
-            imageURL: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Step+1',
+            title: "Prepare the Base",
+            description:
+              "Sand the wooden base smooth and apply wood stain evenly.",
+            imageURL:
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 20,
-            tools: ['Sandpaper', 'Wood stain', 'Brush'],
-            notes: 'Work in a well-ventilated area'
+            tools: ["Sandpaper", "Wood stain", "Brush"],
+            notes: "Work in a well-ventilated area",
           },
           {
             stepNumber: 2,
-            title: 'Install Wiring',
-            description: 'Thread the electrical wire through the base and connect to the socket.',
-            imageURL: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Step+2',
+            title: "Install Wiring",
+            description:
+              "Thread the electrical wire through the base and connect to the socket.",
+            imageURL:
+              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 25,
-            tools: ['Wire strippers', 'Screwdriver'],
-            notes: 'Ensure power is disconnected during wiring'
-          }
+            tools: ["Wire strippers", "Screwdriver"],
+            notes: "Ensure power is disconnected during wiring",
+          },
         ],
         materials: [
           {
-            id: 'wood-base',
-            name: 'Wooden Lamp Base',
-            description: 'Pre-cut wooden base for table lamp',
+            id: "wood-base",
+            name: "Wooden Lamp Base",
+            description: "Pre-cut wooden base for table lamp",
             quantity: 1,
             unitPrice: 15.99,
             totalPrice: 15.99,
-            imageURL: 'https://via.placeholder.com/200x150/059669/FFFFFF?text=Base',
-            amazonURL: 'https://amazon.com/wooden-lamp-base',
-            category: 'Wood'
+            imageURL:
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop&crop=center",
+            amazonURL:
+              "https://www.amazon.com/s?k=wooden+lamp+base&ref=nb_sb_noss",
+            category: "Wood",
           },
           {
-            id: 'lamp-socket',
-            name: 'E26 Lamp Socket',
-            description: 'Standard screw-in lamp socket with switch',
+            id: "lamp-socket",
+            name: "E26 Lamp Socket",
+            description: "Standard screw-in lamp socket with switch",
             quantity: 1,
-            unitPrice: 8.50,
-            totalPrice: 8.50,
-            imageURL: 'https://via.placeholder.com/200x150/059669/FFFFFF?text=Socket',
-            amazonURL: 'https://amazon.com/lamp-socket',
-            category: 'Electronics'
-          }
-        ]
+            unitPrice: 8.5,
+            totalPrice: 8.5,
+            imageURL:
+              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=150&fit=crop&crop=center",
+            amazonURL:
+              "https://www.amazon.com/s?k=lamp+socket+e26&ref=nb_sb_noss",
+            category: "Electronics",
+          },
+        ],
       };
     }
 
-    if (manualId === 'TAMU_logo') {
+    if (manualId === "TAMU_logo") {
       return {
         steps: [
           {
             stepNumber: 1,
-            title: 'Design the Logo Layout',
-            description: 'Create the TAMU logo design using vector graphics software and prepare for cutting.',
-            imageURL: 'https://via.placeholder.com/400x300/500000/FFFFFF?text=Step+1',
+            title: "Design the Logo Layout",
+            description:
+              "Create the TAMU logo design using vector graphics software and prepare for cutting.",
+            imageURL:
+              "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 30,
-            tools: ['Computer', 'Design software', 'Printer'],
-            notes: 'Ensure logo proportions are accurate'
+            tools: ["Computer", "Design software", "Printer"],
+            notes: "Ensure logo proportions are accurate",
           },
           {
             stepNumber: 2,
-            title: 'Cut the Base Material',
-            description: 'Cut the wooden base to the required dimensions for the logo display.',
-            imageURL: 'https://via.placeholder.com/400x300/500000/FFFFFF?text=Step+2',
+            title: "Cut the Base Material",
+            description:
+              "Cut the wooden base to the required dimensions for the logo display.",
+            imageURL:
+              "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 25,
-            tools: ['Saw', 'Sandpaper', 'Measuring tape'],
-            notes: 'Sand all edges smooth'
+            tools: ["Saw", "Sandpaper", "Measuring tape"],
+            notes: "Sand all edges smooth",
           },
           {
             stepNumber: 3,
-            title: 'Apply Logo Design',
-            description: 'Transfer the TAMU logo design to the base material using stencils or vinyl.',
-            imageURL: 'https://via.placeholder.com/400x300/500000/FFFFFF?text=Step+3',
+            title: "Apply Logo Design",
+            description:
+              "Transfer the TAMU logo design to the base material using stencils or vinyl.",
+            imageURL:
+              "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&crop=center",
             estimatedTime: 40,
-            tools: ['Stencils', 'Paint', 'Brushes'],
-            notes: 'Use official TAMU colors: maroon and white'
-          }
+            tools: ["Stencils", "Paint", "Brushes"],
+            notes: "Use official TAMU colors: maroon and white",
+          },
         ],
         materials: [
           {
-            id: 'wood-base-tamu',
-            name: 'Wooden Display Base',
-            description: 'High-quality wood base for logo display',
+            id: "wood-base-tamu",
+            name: "Wooden Display Base",
+            description: "High-quality wood base for logo display",
             quantity: 1,
             unitPrice: 25.99,
             totalPrice: 25.99,
-            imageURL: 'https://via.placeholder.com/200x150/500000/FFFFFF?text=Wood+Base',
-            amazonURL: 'https://amazon.com/wooden-display-base',
-            category: 'Wood'
+            imageURL:
+              "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=200&h=150&fit=crop&crop=center",
+            amazonURL:
+              "https://www.amazon.com/s?k=wooden+display+base&ref=nb_sb_noss",
+            category: "Wood",
           },
           {
-            id: 'maroon-paint',
-            name: 'Maroon Paint',
-            description: 'Official TAMU maroon color paint',
+            id: "maroon-paint",
+            name: "Maroon Paint",
+            description: "Official TAMU maroon color paint",
             quantity: 1,
             unitPrice: 12.99,
             totalPrice: 12.99,
-            imageURL: 'https://via.placeholder.com/200x150/500000/FFFFFF?text=Paint',
-            amazonURL: 'https://amazon.com/maroon-paint',
-            category: 'Paint'
+            imageURL:
+              "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=200&h=150&fit=crop&crop=center",
+            amazonURL: "https://www.amazon.com/s?k=maroon+paint&ref=nb_sb_noss",
+            category: "Paint",
           },
           {
-            id: 'white-paint',
-            name: 'White Paint',
-            description: 'High-quality white paint for logo details',
+            id: "white-paint",
+            name: "White Paint",
+            description: "High-quality white paint for logo details",
             quantity: 1,
             unitPrice: 9.99,
             totalPrice: 9.99,
-            imageURL: 'https://via.placeholder.com/200x150/FFFFFF/000000?text=White+Paint',
-            amazonURL: 'https://amazon.com/white-paint',
-            category: 'Paint'
-          }
-        ]
+            imageURL:
+              "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=200&h=150&fit=crop&crop=center",
+            amazonURL: "https://www.amazon.com/s?k=white+paint&ref=nb_sb_noss",
+            category: "Paint",
+          },
+        ],
       };
     }
 
     // Default fallback
     return {
       steps: [],
-      materials: []
+      materials: [],
     };
   }
 }
