@@ -1,0 +1,56 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Prepare the Base",
+    "description": "Unpack the wooden base and inspect for any damage. Sand lightly if needed and apply wood finish if desired.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-1.jpg?alt=media",
+    "estimatedTime": 15,
+    "tools": ["Sandpaper (220 grit)", "Tack cloth", "Wood finish (optional)"],
+    "notes": "Ensure the base is completely dry before proceeding"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Install the Socket",
+    "description": "Mount the E26 light socket to the lamp shade using the provided hardware. Ensure it's centered and secure.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-2.jpg?alt=media",
+    "estimatedTime": 10,
+    "tools": ["Screwdriver", "Socket mounting screws"],
+    "notes": "Double-check that the socket is firmly attached before wiring"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Wire the Electrical Components",
+    "description": "Connect the power cord to the socket using wire nuts. Follow proper electrical safety procedures and color coding.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-3.jpg?alt=media",
+    "estimatedTime": 20,
+    "tools": ["Wire strippers", "Wire nuts", "Electrical tape"],
+    "notes": "Turn off power and use a voltage tester before working with electrical components"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Attach the Arm to Base",
+    "description": "Secure the articulating arm to the wooden base using the provided bolts. Ensure the arm moves smoothly.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-4.jpg?alt=media",
+    "estimatedTime": 12,
+    "tools": ["Allen wrench", "Assembly bolts"],
+    "notes": "Don't overtighten - the arm should move freely but hold position"
+  },
+  {
+    "stepNumber": 5,
+    "title": "Mount the Lamp Shade",
+    "description": "Attach the wired lamp shade to the end of the articulating arm. Route the wire through the arm channels.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-5.jpg?alt=media",
+    "estimatedTime": 15,
+    "tools": ["Screwdriver", "Mounting screws"],
+    "notes": "Ensure wires are protected and won't be pinched when arm moves"
+  },
+  {
+    "stepNumber": 6,
+    "title": "Final Assembly and Testing",
+    "description": "Install the LED bulb, plug in the lamp, and test all functions. Adjust arm positioning and check stability.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fsteps%2Fstep-6.jpg?alt=media",
+    "estimatedTime": 8,
+    "tools": ["LED bulb"],
+    "notes": "Test the switch and ensure the bulb is properly seated"
+  }
+]

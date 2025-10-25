@@ -1,0 +1,79 @@
+[
+  {
+    "id": "pcb-board-001",
+    "name": "60% PCB Board",
+    "description": "Hot-swappable 60% mechanical keyboard PCB with USB-C connector",
+    "quantity": 1,
+    "unitPrice": 45.99,
+    "totalPrice": 45.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fpcb.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08KEYBOARD1",
+    "category": "Electronics"
+  },
+  {
+    "id": "switches-001",
+    "name": "Cherry MX Blue Switches",
+    "description": "Tactile mechanical switches with audible click feedback",
+    "quantity": 61,
+    "unitPrice": 0.89,
+    "totalPrice": 54.29,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fswitches.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08SWITCHES1",
+    "category": "Electronics"
+  },
+  {
+    "id": "keycaps-001",
+    "name": "PBT Keycap Set",
+    "description": "Double-shot PBT keycaps with Cherry profile, white and gray colorway",
+    "quantity": 1,
+    "unitPrice": 39.99,
+    "totalPrice": 39.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fkeycaps.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08KEYCAPS01",
+    "category": "Accessories"
+  },
+  {
+    "id": "case-001",
+    "name": "Aluminum Keyboard Case",
+    "description": "CNC machined aluminum case with gasket mount design, space gray finish",
+    "quantity": 1,
+    "unitPrice": 89.99,
+    "totalPrice": 89.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fcase.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08CASE00001",
+    "category": "Hardware"
+  },
+  {
+    "id": "stabilizers-001",
+    "name": "PCB Mount Stabilizers",
+    "description": "Genuine Cherry stabilizers for spacebar and modifier keys",
+    "quantity": 4,
+    "unitPrice": 3.99,
+    "totalPrice": 15.96,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fstabilizers.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08STABS0001",
+    "category": "Hardware"
+  },
+  {
+    "id": "foam-001",
+    "name": "Case Foam Kit",
+    "description": "Sound dampening foam for keyboard case and plate",
+    "quantity": 1,
+    "unitPrice": 12.99,
+    "totalPrice": 12.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Ffoam.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08FOAM00001",
+    "category": "Accessories"
+  },
+  {
+    "id": "usb-cable-001",
+    "name": "Coiled USB-C Cable",
+    "description": "Custom coiled USB-C to USB-A cable with aviator connector",
+    "quantity": 1,
+    "unitPrice": 24.99,
+    "totalPrice": 24.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fmaterials%2Fcable.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08CABLE0001",
+    "category": "Accessories"
+  }
+]

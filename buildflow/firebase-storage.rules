@@ -1,0 +1,95 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules for BuildFlow
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ============================================================================
+    // DEMO CONTENT - PUBLIC READ ACCESS
+    // ============================================================================
+    
+    // Allow public read access to demo manuals and images
+    match /manuals/demo/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Demo content should only be uploaded via admin/scripts
+    }
+    
+    // Allow public read access to demo images
+    match /images/demo/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Demo images should only be uploaded via admin/scripts
+    }
+    
+    // ============================================================================
+    // USER GENERATED CONTENT - AUTHENTICATED ACCESS
+    // ============================================================================
+    
+    // Allow authenticated users to manage their own generated manuals
+    match /manuals/generated/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to upload their own images
+    match /images/generated/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ============================================================================
+    // SHARED IMAGES - PUBLIC READ, AUTHENTICATED WRITE
+    // ============================================================================
+    
+    // Allow public read access to shared/public images
+    match /images/public/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ============================================================================
+    // THUMBNAILS - PUBLIC READ ACCESS
+    // ============================================================================
+    
+    // Allow public read access to all thumbnails
+    match /images/thumbnails/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ============================================================================
+    // STEP IMAGES - PUBLIC READ ACCESS
+    // ============================================================================
+    
+    // Allow public read access to step images (for sharing manuals)
+    match /images/steps/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ============================================================================
+    // MATERIAL IMAGES - PUBLIC READ ACCESS
+    // ============================================================================
+    
+    // Allow public read access to material images
+    match /images/materials/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ============================================================================
+    // ADMIN CONTENT - RESTRICTED ACCESS
+    // ============================================================================
+    
+    // Restrict access to admin content
+    match /admin/{allPaths=**} {
+      allow read, write: if false; // Only allow via Firebase Admin SDK
+    }
+    
+    // ============================================================================
+    // DEFAULT DENY - SECURITY FALLBACK
+    // ============================================================================
+    
+    // Deny access to any other paths not explicitly allowed
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

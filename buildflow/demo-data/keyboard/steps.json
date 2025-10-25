@@ -1,0 +1,74 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Prepare the PCB",
+    "description": "Unpack the PCB and inspect for any damage. Test all switch sockets with a multimeter to ensure proper connectivity.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-1.jpg?alt=media",
+    "estimatedTime": 10,
+    "tools": ["Multimeter", "Anti-static wrist strap"],
+    "notes": "Handle the PCB carefully to avoid static damage"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Install Stabilizers",
+    "description": "Insert the stabilizers into the designated slots on the PCB. Ensure they click into place securely and test the movement.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-2.jpg?alt=media",
+    "estimatedTime": 15,
+    "tools": ["Stabilizer puller (optional)"],
+    "notes": "Apply light lubrication to stabilizer wires for smoother operation"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Test Switch Sockets",
+    "description": "Insert a few switches into different positions to test the hot-swap sockets. Remove them after testing.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-3.jpg?alt=media",
+    "estimatedTime": 5,
+    "tools": ["Test switches"],
+    "notes": "Don't force switches if they don't fit easily"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Install Case Foam",
+    "description": "Place the case foam in the bottom of the keyboard case, ensuring it fits snugly without overlapping the screw holes.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-4.jpg?alt=media",
+    "estimatedTime": 8,
+    "tools": ["Scissors (if trimming needed)"],
+    "notes": "Trim foam carefully if it doesn't fit perfectly"
+  },
+  {
+    "stepNumber": 5,
+    "title": "Mount PCB in Case",
+    "description": "Carefully place the PCB into the case, aligning the USB connector with the case opening. Secure with provided screws.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-5.jpg?alt=media",
+    "estimatedTime": 12,
+    "tools": ["Phillips head screwdriver", "Screws"],
+    "notes": "Don't overtighten screws to avoid PCB damage"
+  },
+  {
+    "stepNumber": 6,
+    "title": "Install All Switches",
+    "description": "Insert all mechanical switches into their designated positions. Press firmly until they click into place.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-6.jpg?alt=media",
+    "estimatedTime": 20,
+    "tools": ["Switch puller (for corrections)"],
+    "notes": "Ensure all switch pins are straight before insertion"
+  },
+  {
+    "stepNumber": 7,
+    "title": "Install Keycaps",
+    "description": "Place keycaps on all switches according to the layout diagram. Start with larger keys (spacebar, shift) then work on smaller keys.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-7.jpg?alt=media",
+    "estimatedTime": 15,
+    "tools": ["Keycap puller"],
+    "notes": "Press keycaps straight down to avoid switch damage"
+  },
+  {
+    "stepNumber": 8,
+    "title": "Final Testing and Setup",
+    "description": "Connect the keyboard to your computer and test all keys. Configure any custom layouts or macros as desired.",
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fsteps%2Fstep-8.jpg?alt=media",
+    "estimatedTime": 10,
+    "tools": ["Computer", "USB cable", "Key testing software"],
+    "notes": "Use online key testers to verify all keys work properly"
+  }
+]

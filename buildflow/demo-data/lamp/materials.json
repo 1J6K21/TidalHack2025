@@ -1,0 +1,90 @@
+[
+  {
+    "id": "lamp-base-001",
+    "name": "Wooden Lamp Base",
+    "description": "Solid oak wood base with pre-drilled holes for wiring, natural finish",
+    "quantity": 1,
+    "unitPrice": 34.99,
+    "totalPrice": 34.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fbase.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08LAMPBASE1",
+    "category": "Hardware"
+  },
+  {
+    "id": "lamp-arm-001",
+    "name": "Adjustable Metal Arm",
+    "description": "Brushed aluminum articulating arm with spring-loaded joints",
+    "quantity": 1,
+    "unitPrice": 28.99,
+    "totalPrice": 28.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Farm.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08LAMPARM01",
+    "category": "Hardware"
+  },
+  {
+    "id": "led-bulb-001",
+    "name": "LED Light Bulb",
+    "description": "9W dimmable LED bulb, warm white 3000K, E26 base",
+    "quantity": 1,
+    "unitPrice": 12.99,
+    "totalPrice": 12.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fbulb.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08LEDBULB01",
+    "category": "Electronics"
+  },
+  {
+    "id": "lamp-shade-001",
+    "name": "Metal Lamp Shade",
+    "description": "Matte black metal shade with white interior for optimal light reflection",
+    "quantity": 1,
+    "unitPrice": 19.99,
+    "totalPrice": 19.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fshade.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08LAMPSHADE",
+    "category": "Hardware"
+  },
+  {
+    "id": "switch-001",
+    "name": "Inline Power Switch",
+    "description": "Toggle switch with 6ft power cord, UL listed for safety",
+    "quantity": 1,
+    "unitPrice": 8.99,
+    "totalPrice": 8.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fswitch.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08SWITCH001",
+    "category": "Electronics"
+  },
+  {
+    "id": "socket-001",
+    "name": "E26 Light Socket",
+    "description": "Standard E26 screw-in socket with mounting hardware",
+    "quantity": 1,
+    "unitPrice": 6.99,
+    "totalPrice": 6.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fsocket.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08SOCKET001",
+    "category": "Electronics"
+  },
+  {
+    "id": "wire-nuts-001",
+    "name": "Wire Nuts Set",
+    "description": "Assorted wire nuts for electrical connections, UL listed",
+    "quantity": 1,
+    "unitPrice": 4.99,
+    "totalPrice": 4.99,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fwirenuts.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08WIRENUTS1",
+    "category": "Hardware"
+  },
+  {
+    "id": "screws-001",
+    "name": "Assembly Screws Kit",
+    "description": "Various screws and bolts for lamp assembly with Allen wrench",
+    "quantity": 1,
+    "unitPrice": 9.51,
+    "totalPrice": 9.51,
+    "imageURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fmaterials%2Fscrews.jpg?alt=media",
+    "amazonURL": "https://amazon.com/dp/B08SCREWS001",
+    "category": "Hardware"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "id": "desk-lamp-2024",
+  "productName": "Modern Desk Lamp",
+  "thumbnailURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Flamp%2Fimages%2Fthumbnail.jpg?alt=media",
+  "firebaseManualPath": "manuals/demo/lamp",
+  "firebaseImagePath": "manuals/demo/lamp/images",
+  "createdAt": "2024-01-20T14:15:00.000Z",
+  "totalPrice": 127.45,
+  "stepCount": 6
+}

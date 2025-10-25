@@ -1,0 +1,10 @@
+{
+  "id": "keyboard-build-2024",
+  "productName": "Custom Mechanical Keyboard",
+  "thumbnailURL": "https://firebasestorage.googleapis.com/v0/b/buildflow-demo/o/manuals%2Fdemo%2Fkeyboard%2Fimages%2Fthumbnail.jpg?alt=media",
+  "firebaseManualPath": "manuals/demo/keyboard",
+  "firebaseImagePath": "manuals/demo/keyboard/images",
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "totalPrice": 189.99,
+  "stepCount": 8
+}
