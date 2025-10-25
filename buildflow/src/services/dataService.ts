@@ -5,8 +5,6 @@ import {
   Material,
   GenerateManualResponse,
 } from "../types";
-import { firebaseService } from "./firebaseService";
-import { manualGenerationService } from "./manualGenerationService";
 
 // ============================================================================
 // DATA SERVICE - MODE-SPECIFIC DATA LOADING
@@ -30,8 +28,35 @@ export class DataService {
   private static async loadDemoManuals(): Promise<Manual[]> {
     console.log("🔍 Loading demo manuals...");
 
-    // For now, always use fallback data since Firebase is not fully configured
-    // In a real implementation, this would try Firebase first
+    // For now, skip Firebase and use fallback data directly
+    // TODO: Re-enable Firebase loading once demo data is uploaded
+    console.log("⚠️ Using fallback data (Firebase loading disabled)");
+    
+    /* 
+    try {
+      // Try to load from Firebase first with timeout
+      const { getManualsList } = await import('./firebaseStorage');
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Firebase timeout')), 5000)
+      );
+      
+      const result = await Promise.race([
+        getManualsList(true), // true = demo mode
+        timeoutPromise
+      ]) as any;
+      
+      if (result.success && result.data.manuals.length > 0) {
+        console.log("✅ Loaded demo manuals from Firebase:", result.data.manuals);
+        return result.data.manuals;
+      } else {
+        console.warn("⚠️ Firebase returned no demo manuals, using fallback data");
+      }
+    } catch (error) {
+      console.warn("⚠️ Failed to load from Firebase, using fallback data:", error);
+    }
+    */
+
+    // Fallback to hardcoded data if Firebase fails
     const fallbackManuals: Manual[] = [
       {
         id: "keyboard",
@@ -111,11 +136,45 @@ export class DataService {
   ): Promise<{ steps: Step[]; materials: Material[] }> {
     console.log("🔍 Loading demo manual data for:", manual.id);
 
-    // For now, always use fallback data since Firebase is not fully configured
-    // In a real implementation, this would try Firebase first
+    // For now, skip Firebase and use fallback data directly
+    // TODO: Re-enable Firebase loading once demo data is uploaded
+    console.log("⚠️ Using fallback data (Firebase loading disabled)");
+
+    /*
+    try {
+      // Try to load from Firebase first with timeout
+      const { getManual } = await import('./firebaseStorage');
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Firebase timeout')), 5000)
+      );
+      
+      const result = await Promise.race([
+        getManual(manual.id, true), // true = demo mode
+        timeoutPromise
+      ]) as any;
+      
+      if (result.success && result.data.steps.length > 0) {
+        console.log("✅ Loaded demo manual data from Firebase:", {
+          manualId: manual.id,
+          stepsCount: result.data.steps.length,
+          materialsCount: result.data.materials.length,
+        });
+        return {
+          steps: result.data.steps,
+          materials: result.data.materials
+        };
+      } else {
+        console.warn("⚠️ Firebase returned no demo manual data, using fallback data");
+      }
+    } catch (error) {
+      console.warn("⚠️ Failed to load demo manual data from Firebase, using fallback data:", error);
+    }
+    */
+
+    // Fallback to hardcoded data if Firebase fails
     const data = this.getFallbackDemoData(manual.id);
 
-    console.log("✅ Loaded demo manual data:", {
+    console.log("✅ Loaded demo manual data from fallback:", {
       manualId: manual.id,
       stepsCount: data.steps.length,
       materialsCount: data.materials.length,
@@ -131,12 +190,17 @@ export class DataService {
     manual: Manual
   ): Promise<{ steps: Step[]; materials: Material[] }> {
     try {
-      const steps = await firebaseService.getSteps(manual.firebaseManualPath);
-      const materials = await firebaseService.getMaterials(
-        manual.firebaseManualPath
-      );
-
-      return { steps, materials };
+      const { getManual } = await import('./firebaseStorage');
+      const result = await getManual(manual.id, false); // false = not demo mode
+      
+      if (result.success) {
+        return {
+          steps: result.data.steps,
+          materials: result.data.materials
+        };
+      } else {
+        throw new Error(result.error?.message || 'Failed to load manual data');
+      }
     } catch (error) {
       console.error("Error loading generated manual data:", error);
       throw new Error("Failed to load manual data");
@@ -155,6 +219,7 @@ export class DataService {
     }
 
     try {
+      const { manualGenerationService } = await import('./manualGenerationService');
       return await manualGenerationService.generateManual({
         productIdea,
         userId: "testuser", // In real app, this would come from auth

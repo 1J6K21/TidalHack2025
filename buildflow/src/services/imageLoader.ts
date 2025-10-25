@@ -52,6 +52,13 @@ export async function loadImage(
     timeout = 10000
   } = options;
 
+  // Check if this is a Firebase Storage URL and convert it
+  if (imageUrl.startsWith('gs://')) {
+    // Extract the path from the gs:// URL
+    const firebasePath = imageUrl.replace('gs://mannyai-d0b04.firebasestorage.app/', '');
+    return loadFirebaseImage(firebasePath, options);
+  }
+
   // Check cache first
   if (imageCache.has(imageUrl)) {
     return {
