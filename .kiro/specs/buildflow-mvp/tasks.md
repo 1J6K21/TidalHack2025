@@ -88,15 +88,15 @@
   - Test loading and error states
   - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 6. Implement text input and manual generation
-- [ ] 6.1 Create TextInput component for product ideas
+- [x] 6. Implement text input and manual generation
+- [x] 6.1 Create TextInput component for product ideas
 
   - Build input form with validation and submission handling
   - Implement state-based behavior (demo mode vs live mode)
   - Add loading indicators during generation process
   - _Requirements: 2.1, 2.6_
 
-- [ ] 6.2 Integrate Gemini AI generation directly from frontend
+- [x] 6.2 Integrate Gemini AI generation directly from frontend
 
   - Connect frontend to Gemini API service
   - Implement request/response handling with proper error management
@@ -104,15 +104,15 @@
   - Store generated manuals in Firebase Cloud Storage under /manuals/generated/ path
   - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 6.3 Write tests for manual generation flow
+- [x] 6.3 Write tests for manual generation flow
 
   - Test input validation and submission
   - Mock Gemini API responses and test error scenarios
   - Validate generated manual data structure
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 7. Build materials review and pricing interface
-- [ ] 7.1 Create MaterialsView component
+- [x] 7. Build materials review and pricing interface
+- [x] 7.1 Create MaterialsView component
 
   - Implement responsive materials grid with images, names, and quantities
   - Add pricing display with per-item and total calculations
@@ -120,14 +120,14 @@
   - Implement "Confirm" and "Cancel" action buttons
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-- [ ] 7.2 Implement pricing calculation utilities
+- [x] 7.2 Implement pricing calculation utilities
 
   - Create functions for calculating item totals and grand total
   - Add currency formatting and display utilities
   - Implement price validation and error handling
   - _Requirements: 3.3, 2.5_
 
-- [ ] 7.3 Write tests for materials view and pricing
+- [x] 7.3 Write tests for materials view and pricing
 
   - Test materials grid rendering with various data sets
   - Validate pricing calculations and currency formatting

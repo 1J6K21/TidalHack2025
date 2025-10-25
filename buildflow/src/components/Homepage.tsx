@@ -30,7 +30,7 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
       {
         id: 'keyboard-build-2024',
         productName: 'Custom Mechanical Keyboard',
-        thumbnailURL: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop',
+        thumbnailURL: 'https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MECHANICAL-KEYBOARDS-2048px-0673.jpg',
         firebaseManualPath: 'manuals/demo/keyboard',
         firebaseImagePath: 'manuals/demo/keyboard/images',
         createdAt: new Date('2024-01-15T10:30:00.000Z'),
@@ -40,7 +40,7 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
       {
         id: 'lamp-build-2024',
         productName: 'Modern Table Lamp',
-        thumbnailURL: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+        thumbnailURL: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRkN3TPaZbJOved98R8ZlCkIN7xFFPHHgLcDkYtYs5vsogHjA1fwjqjl6nW_jgrqEEwd40N2R-BE-0BKGugGirpG8xaseztkqPrPAeJZ-vvYQ3o5DXRJSPl7E0&usqp=CAc&fit=crop',
         firebaseManualPath: 'manuals/demo/lamp',
         firebaseImagePath: 'manuals/demo/lamp/images',
         createdAt: new Date('2024-01-16T14:20:00.000Z'),
@@ -103,8 +103,8 @@ const Homepage: React.FC<HomepageProps> = ({ onOpenManual, onCreateNew }) => {
           {/* Error State */}
           {loadingState === LoadingState.ERROR && error && (
             <div className="max-w-md mx-auto">
-              <ErrorMessage 
-                error={error} 
+              <ErrorMessage
+                error={error}
                 onRetry={error.retryable ? handleRetry : undefined}
               />
             </div>
