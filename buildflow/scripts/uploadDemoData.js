@@ -5,10 +5,14 @@
  * This script uploads the keyboard and lamp demo projects to the Firebase storage
  */
 
+const path = require('path');
+
+// Load environment variables from .env.local
+require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
+
 const { initializeApp } = require('firebase/app');
 const { getStorage, ref, uploadBytes } = require('firebase/storage');
 const fs = require('fs');
-const path = require('path');
 
 // Firebase configuration - using environment variables
 const firebaseConfig = {

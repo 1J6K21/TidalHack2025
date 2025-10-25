@@ -286,7 +286,13 @@ export async function getManual(manualId: string, isDemo: boolean = false): Prom
     const manualRef = ref(storage, `${basePath}/metadata.json`);
     const manualBytes = await getBytes(manualRef);
     const manualText = new TextDecoder().decode(manualBytes);
-    const manual: Manual = JSON.parse(manualText);
+    const rawManual = JSON.parse(manualText);
+    
+    // Convert createdAt string to Date object
+    const manual: Manual = {
+      ...rawManual,
+      createdAt: new Date(rawManual.createdAt)
+    };
     
     // Download steps data
     const stepsRef = ref(storage, `${basePath}/steps.json`);
@@ -340,23 +346,45 @@ export async function getManualsList(isDemo: boolean = true): Promise<ApiRespons
       ? STORAGE_PATHS.MANUALS.DEMO
       : STORAGE_PATHS.MANUALS.GENERATED;
     
+    console.log('🔥 Firebase getManualsList - basePath:', basePath);
+    
     const listRef = ref(storage, basePath);
     const listResult = await listAll(listRef);
+    
+    console.log('🔥 Firebase listAll result:', {
+      prefixes: listResult.prefixes.map(p => p.name),
+      items: listResult.items.map(i => i.name)
+    });
     
     const manuals: Manual[] = [];
     
     // Process each manual directory
     for (const folderRef of listResult.prefixes) {
       try {
+        console.log('🔥 Processing folder:', folderRef.name, 'fullPath:', folderRef.fullPath);
+        
         const metadataRef = ref(storage, `${folderRef.fullPath}/metadata.json`);
         const metadataBytes = await getBytes(metadataRef);
         const metadataText = new TextDecoder().decode(metadataBytes);
-        const manual: Manual = JSON.parse(metadataText);
+        const rawManual = JSON.parse(metadataText);
+        
+        console.log('🔥 Raw manual data:', rawManual);
+        
+        // Convert createdAt string to Date object
+        const manual: Manual = {
+          ...rawManual,
+          createdAt: new Date(rawManual.createdAt)
+        };
+        
+        console.log('🔥 Processed manual:', manual);
         
         // Validate manual structure
         const validation = validateManualStructure(manual);
+        console.log('🔥 Validation result:', validation);
+        
         if (validation.isValid) {
           manuals.push(manual);
+          console.log('🔥 Added manual to list. Total count:', manuals.length);
         } else {
           console.warn(`Invalid manual structure for ${folderRef.name}:`, validation.errors);
         }

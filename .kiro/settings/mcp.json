@@ -6,7 +6,7 @@
 "args": [
 "-y",
 "figma-developer-mcp",
-"--figma-api-key=figd_PyiwzgTL6VLCI7Bn9zQWL_TUFz1riF4mYN_s8aMw",
+"--figma-api-key=figd_z3IiJwWrjxAYa56B3XM_p9gUBhZc2jQdBpuIMttm",
 "--stdio"
 ],
 "disabled": false,

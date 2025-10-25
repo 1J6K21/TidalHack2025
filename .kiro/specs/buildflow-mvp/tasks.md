@@ -63,9 +63,10 @@
   - Test error scenarios and fallback behavior
   - _Requirements: 2.2, 2.3_
 
-- [ ] 5. Create homepage and manual browsing functionality
+- [x] 5. Create homepage and manual browsing functionality
 - Our app is called Manny; Motto: "vibe build"; alternate name: Manny.ai
-- [ ] 5.1 Implement Homepage component
+- Use The MCP for figma to match the view pages
+- [x] 5.1 Implement Homepage component
 
   - Create responsive grid layout for manual cards
   - Implement manual card component with thumbnail, name, and "Open Manual" button
@@ -73,14 +74,14 @@
   - Integrate with Firebase Cloud Storage to fetch demo manual list
   - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 5.2 Implement manual data fetching service
+- [x] 5.2 Implement manual data fetching service
 
   - Create Firebase service utility for fetching manual metadata
   - Implement caching mechanism for manual list data
   - Add loading states and error handling for network failures
   - _Requirements: 1.1, 1.4, 1.5_
 
-- [ ] 5.3 Write component tests for homepage functionality
+- [x] 5.3 Write component tests for homepage functionality
 
   - Test manual card rendering with mock data
   - Validate navigation behavior and button interactions
