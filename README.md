@@ -15,7 +15,7 @@ www.linkedin.com/in/dominic-martinez-b2109530b
 https://youtu.be/umaCNd4jPfY?si=QRRDb36p3LI-7tyr 
 <br></br>
 ## Presentation:
-https://github.com/1J6K21/TidalHack2025/edit/main/Presentation.pdf
+[https://github.com/1J6K21/TidalHack2025/edit/main/Presentation.pdf](https://github.com/1J6K21/TidalHack2025/blob/main/Presentation.pdf)
 <br></br>
 ## FIGMA:
 ### Concept/Prototype
