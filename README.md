@@ -1,6 +1,6 @@
 # TidalHack2025
 #### We made this product in Texas A&M's TIDAL HACK 2025 - A hackathon that let us create this project(from no idea to Manny) in around 7 hours. This is our MVP!
-## Contributers:
+## Contributors:
 Jonathan Kalsky '29 (CS):<br></br>
 www.linkedin.com/in/jonathan-kalsky<br></br>
 Anthony Hoang '29 (CS):<br></br>
